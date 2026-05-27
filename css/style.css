@@ -481,6 +481,13 @@ body {
     margin-bottom: 2rem;
 }
 
+.dashboard-alerts-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
 /* Mini Lists */
 .mini-list {
     display: flex;
@@ -497,6 +504,8 @@ body {
     background: var(--bg-surface-opaque);
     border: 1px solid var(--border-color);
     transition: all var(--transition-speed);
+    gap: 0.75rem;
+    min-width: 0;
 }
 
 .mini-list-item:hover {
@@ -508,6 +517,8 @@ body {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    flex: 1;
+    min-width: 0;
 }
 
 .item-icon {
@@ -519,20 +530,34 @@ body {
     align-items: center;
     justify-content: center;
     color: var(--text-primary);
+    flex-shrink: 0;
+}
+
+.item-info {
+    flex: 1;
+    min-width: 0;
 }
 
 .item-info h4 {
     font-size: 0.95rem;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .item-info span {
     font-size: 0.75rem;
     color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
 }
 
 .item-right {
     text-align: right;
+    flex-shrink: 0;
 }
 
 .item-amount {
@@ -1217,7 +1242,7 @@ body {
     }
 }
 
-/* Responsive Styles */
+/* Responsive Styles & Premium Mobile UX */
 @media (max-width: 1024px) {
     .sidebar {
         transform: translateX(-100%);
@@ -1236,6 +1261,10 @@ body {
         grid-template-columns: 1fr;
     }
     
+    .dashboard-alerts-grid {
+        grid-template-columns: 1fr;
+    }
+    
     .debt-dashboard {
         grid-template-columns: 1fr;
     }
@@ -1245,20 +1274,280 @@ body {
     }
 }
 
-.mobile-menu-toggle {
-    display: none;
-    position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: var(--primary);
-    color: white;
-    align-items: center;
-    justify-content: center;
-    z-index: 1001;
-    box-shadow: 0 4px 15px var(--primary-glow);
-    cursor: pointer;
-    font-size: 1.25rem;
+/* Screen sizes < 768px: Premium Bottom Navigation & App Layout */
+@media (max-width: 767px) {
+    /* Hide floating menu toggle since we have a dedicated bottom navbar */
+    .mobile-menu-toggle {
+        display: none !important;
+    }
+
+    /* Convert Sidebar into a sleek Bottom Navigation Bar */
+    .sidebar {
+        transform: none !important;
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        left: 0;
+        width: 100vw;
+        height: 68px;
+        padding: 0 0.5rem;
+        border-right: none;
+        border-top: 1px solid var(--border-color);
+        background: hsla(224, 25%, 8%, 0.9);
+        backdrop-filter: blur(30px) saturate(120%);
+        z-index: 1000;
+        flex-direction: row;
+        box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .sidebar-top {
+        width: 100%;
+    }
+
+    .logo-container,
+    .sidebar-footer {
+        display: none !important;
+    }
+
+    .nav-links {
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        gap: 0;
+    }
+
+    .nav-item {
+        flex: 1;
+    }
+
+    .nav-item a {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        padding: 6px 0;
+        background: transparent !important;
+        box-shadow: none !important;
+        border-radius: 0;
+    }
+
+    .nav-item a i {
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        transition: transform var(--transition-speed), color var(--transition-speed);
+    }
+
+    .nav-item a span {
+        font-size: 0.6rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        transition: color var(--transition-speed);
+    }
+
+    .nav-item.active a i {
+        color: var(--primary);
+        transform: translateY(-2px) scale(1.1);
+        text-shadow: 0 0 10px var(--primary-glow);
+    }
+
+    .nav-item.active a span {
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+
+    /* Redesign Alert Dot on Bottom Nav */
+    .alert-dot {
+        top: 6px;
+        right: calc(50% - 15px);
+        transform: none;
+        width: 6px;
+        height: 6px;
+    }
+
+    /* Adjust Content padding to fit bottom bar */
+    .main-content {
+        padding: 1.25rem 1.25rem 90px 1.25rem;
+        margin-left: 0;
+    }
+
+    /* Top Action Bar Alignment */
+    .top-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.25rem;
+        text-align: center;
+    }
+
+    .top-header div[style*="display: flex"] {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .btn-primary#btnQuickAdd {
+        width: 100%;
+    }
+
+    /* Premium Slide-Up Sheet Modals for Mobile */
+    .modal-overlay {
+        align-items: flex-end;
+    }
+
+    .modal-container {
+        border-radius: 24px 24px 0 0;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.32, 0.94, 0.6, 1);
+    }
+
+    .modal-overlay.active .modal-container {
+        transform: translateY(0);
+    }
+
+    .modal-header {
+        border-radius: 24px 24px 0 0;
+        position: relative;
+        padding-top: 1.75rem;
+    }
+
+    /* Modal Drag Indicator Handle */
+    .modal-header::before {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 4px;
+        border-radius: 2px;
+        background: var(--text-muted);
+        opacity: 0.4;
+    }
 }
+
+/* Screen sizes < 600px: Details Journal Cards & compact layout */
+@media (max-width: 600px) {
+    .welcome-section h1 {
+        font-size: 1.75rem;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .stats-card {
+        padding: 1.25rem;
+    }
+
+    .stats-amount {
+        font-size: 1.85rem;
+    }
+
+    /* Transform Transaction Ledger Table into Gorgeous Stacked Cards */
+    .transaction-table-wrapper {
+        overflow: visible;
+    }
+
+    .transaction-table,
+    .transaction-table tbody,
+    .transaction-table tr,
+    .transaction-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .transaction-table thead {
+        display: none !important;
+    }
+
+    .transaction-table tr {
+        background: var(--bg-surface-opaque);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        margin-bottom: 0.85rem;
+        padding: 1rem;
+        position: relative;
+        box-shadow: var(--shadow-premium);
+        transition: transform var(--transition-speed);
+    }
+
+    .transaction-table tr:hover {
+        transform: translateY(-2px);
+    }
+
+    .transaction-table td {
+        padding: 0.2rem 0;
+        border-bottom: none;
+    }
+
+    /* Column 1: Date & Time */
+    .transaction-table td:nth-child(1) {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+
+    /* Column 2: Purpose (Make title prominent) */
+    .transaction-table td:nth-child(2) {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin-top: 0.15rem;
+        padding-right: 90px; /* Leave space for absolute amount */
+        color: var(--text-primary);
+    }
+
+    /* Column 3: Category Badge */
+    .transaction-table td:nth-child(3) {
+        display: inline-block;
+        margin-top: 0.35rem;
+        margin-right: 0.4rem;
+    }
+
+    /* Column 4: In/Out Badge */
+    .transaction-table td:nth-child(4) {
+        display: inline-block;
+        margin-top: 0.35rem;
+    }
+
+    /* Column 5: Amount (Position Absolutely inside card) */
+    .transaction-table td:nth-child(5) {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        text-align: right;
+        font-size: 1.15rem;
+        padding: 0;
+    }
+
+    /* Column 6: Action Buttons */
+    .transaction-table td:nth-child(6) {
+        border-top: 1px dashed var(--border-color);
+        margin-top: 0.75rem;
+        padding-top: 0.6rem;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    /* Settings Page compact widths */
+    .settings-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .settings-action {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .settings-action input,
+    .settings-action select,
+    .settings-action button {
+        width: 100% !important;
+    }
+}
+
